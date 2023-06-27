@@ -1,2 +1,4 @@
 node_modules
 .env
+src/Config/config.json
+src/Config/EmailConfig.js
