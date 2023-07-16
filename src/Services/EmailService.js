@@ -29,7 +29,7 @@ const fectchPendingMails = async (timestamp) => {
   }
 }
 
-const createNotification = async (data) => {
+const createNotification = async (data) => {/* this function registers in database for sending an email which logs with status as pending, then cron job runs and sends the mail*/
   try {
     console.log("this is service", data);
     const response = await repo.create(data);
@@ -48,6 +48,22 @@ const updateTicket = async (ticketId, data) => {
   }
 }
 
+const subscribeEvents = async (payload) => {
+  let service = payload.service;
+  let data = payload.data;
+  switch (service) {
+    case "CREATE_TICKET":
+      await createNotification(data);
+      break;
+    case "SEND_BASIC_MAIL":
+      await SendMail(data);
+      break;
+    default:
+      console.log("no valid event recieved");
+      break;
+  }
+}
+
 module.exports = {
-  SendMail, fectchPendingMails, createNotification,updateTicket
+  SendMail, fectchPendingMails, createNotification, updateTicket, subscribeEvents
 }
